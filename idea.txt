@@ -1,0 +1,16 @@
+App um DND Kampagnen zu managen
+Struktur:
+Kampagne    -> Name, Titelbild
+    Info    -> Beschreibung
+
+    Areas   -> Typ? (Dungeon, Stadt, Gebäude)  
+        Maps    -> zugehörig zu Kampagne, aber kopierbar
+                -> Rätsel zugehörig zur Map
+                -> Gegner zugehörig zu Map
+        
+    Charaktere  -> Sheet / Stats - + to hit, AC
+                -> Spells - alle / am diesem Tag verfügbar?
+                -> Unterteilung in PC / NPCs
+                -> Misc Info
+
+    Gegenstände  -> Name, Gewicht, Effekt
