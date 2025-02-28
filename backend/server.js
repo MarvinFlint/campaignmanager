@@ -1,14 +1,13 @@
-import { Pool } from "pg";
-const express = require('express')
+import pg from 'pg';
+import express from 'express';
+import cors from 'cors';
+
 const app = express()
 const port = 3000
 
-app.get('/characters', async (req, res) => {
-    const [rows] = await pool.execute('SELECT * FROM campaigns');
-    res.json(rows);
-  });
+app.use(cors());
 
-const pool = new Pool({
+const pool = new pg.Pool({
     user: 'module_manager',
     host: 'localhost',
     database: 'modules',
@@ -16,6 +15,16 @@ const pool = new Pool({
     port: 5432,
 });
 
+app.get('/campaigns', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM campaign');
+        res.json(result.rows);
+        console.log(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching campaigns');
+    }
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

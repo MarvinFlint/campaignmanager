@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import CampaignList from '@/components/CampaignList.vue';
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <CampaignList />
   </main>
 </template>
