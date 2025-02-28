@@ -4,7 +4,7 @@ const app = express()
 const port = 3000
 
 app.get('/characters', async (req, res) => {
-    const [rows] = await pool.execute('SELECT * FROM character');
+    const [rows] = await pool.execute('SELECT * FROM campaigns');
     res.json(rows);
   });
 
