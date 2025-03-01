@@ -1,9 +1,11 @@
 // stores/campaignStore.js
 import { defineStore } from 'pinia';
+import { reactive } from 'vue';
 
 export const useCampaignStore = defineStore('campaign', {
     state: () => ({
         campaigns: [],
+        currentCampaign: null
     }),
     actions: {
         async fetchCampaigns() {
@@ -21,5 +23,14 @@ export const useCampaignStore = defineStore('campaign', {
                 console.error('Error fetching campaigns:', error);
             }
         },
+        async fetchCampaign(id) {
+            try {
+                const response = await fetch(`http://localhost:3000/campaigns/${id}`);
+                const data = await response.json();
+                this.currentCampaign = data;
+            } catch (error) {
+                console.error('Error fetching campaign:', error);
+            }
+        }
     },
 });

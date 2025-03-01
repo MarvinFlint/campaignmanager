@@ -26,6 +26,23 @@ app.get('/campaigns', async (req, res) => {
     }
 });
 
+app.get('/campaigns/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query('SELECT * FROM campaign WHERE id = $1', [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Campaign not found" });
+        }
+        res.json(result.rows[0]);
+        console.log(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching campaign');
+    }
+});
+
+
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Module Manager backend listening on port ${port}`)
 })

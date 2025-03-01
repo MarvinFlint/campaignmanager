@@ -2,25 +2,26 @@
     <div>
       <h1>Campaigns</h1>
       <ul>
-        <li v-for="campaign in campaigns" :key="campaign.id">
-          {{ campaign.name }}
+        <li v-for="campaign in campaignStore.campaigns" :key="campaign.id">
+            <router-link :to="`/campaign/${campaign.id}`">
+                {{ campaign.name }}
+            </router-link>
         </li>
       </ul>
     </div>
-  </template>
+</template>
   
-  <script setup>
-    import { onBeforeMount } from 'vue';
-    import { useCampaignStore } from '../stores/campaignStore';  
+<script setup>
+import { onBeforeMount } from 'vue';
+import { useCampaignStore } from '../stores/campaignStore';  
+
+const campaignStore = useCampaignStore();
+
+onBeforeMount(() => {
+    campaignStore.fetchCampaigns();
+});
+</script>
   
-    const campaignStore = useCampaignStore();
-    onBeforeMount(() => {
-        campaignStore.fetchCampaigns();    
-    })
-    const campaigns = campaignStore.campaigns;
-     
-  </script>
-  
-  <style scoped>
-  /* Add your styles here */
-  </style>
+<style scoped>
+
+</style>
