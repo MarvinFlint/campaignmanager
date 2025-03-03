@@ -9,38 +9,32 @@
         </li>
       </ul>
     </div>
-    <div v-if="showCreatePanel" class="create-panel">
-      <h2>Create New Campaign</h2>
-      <form @submit.prevent="createCampaign">
-        <label>
-          Name:
-          <input v-model="newCampaign.name" required />
-        </label>
-        <label>
-          Description:
-          <textarea v-model="newCampaign.description"></textarea>
-        </label>
-        <button type="submit">Create</button>
-        <button @click="showCreatePanel = false" type="button">Cancel</button>
-      </form>
+    <div class="create-campaign" @click="showCreateForm = true">
+        +
+    </div>
+    <div v-if="showCreateForm">
+        <h2>Create Campaign</h2>
+        <input type="text" v-model="newCampaignName" />
+        <button @click="createCampaign()">Create</button>
     </div>
 </template>
   
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useCampaignStore } from '../stores/campaignStore';  
 
 const campaignStore = useCampaignStore();
+let showCreateForm = ref(false);
 
 onBeforeMount(() => {
     campaignStore.fetchCampaigns();
 });
 
-const createCampaign = async () => {
-  await campaignStore.createCampaign(newCampaign.value);
-  showCreatePanel.value = false; // Close panel after creation
-  newCampaign.value = { name: '', description: '' }; // Reset form
-};
+function setCreateFormVisibility() {
+    console.log('setCreateFormVisibility');
+    showCreateForm = !showCreateForm;    
+    console.log(showCreateForm);
+}
 </script>
   
 <style scoped>
