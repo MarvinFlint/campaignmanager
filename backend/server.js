@@ -5,6 +5,7 @@ import cors from 'cors';
 const app = express()
 const port = 3000
 
+app.use(express.json());
 app.use(cors());
 
 const pool = new pg.Pool({
@@ -44,6 +45,7 @@ app.get('/campaigns/:id', async (req, res) => {
 
 app.post('/campaigns', async (req, res) => {
     const { name, description } = req.body;
+    console.log(name, description);
     try {
         const result = await pool.query('INSERT INTO campaign (name, description) VALUES ($1, $2) RETURNING *', [name, description]);
         res.json(result.rows[0]);

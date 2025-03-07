@@ -33,6 +33,7 @@ export const useCampaignStore = defineStore('campaign', {
             }
         },
         async createCampaign(campaign) {
+            console.log(campaign);
             try {
                 const response = await fetch('http://localhost:3000/campaigns', {
                     method: 'POST',
