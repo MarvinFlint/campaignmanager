@@ -1,13 +1,9 @@
 <template>
     <div>
-      <h1>Campaigns</h1>
-      <ul>
+        <h1>Campaigns</h1>    
         <li v-for="campaign in campaignStore.campaigns" :key="campaign.id">
-            <router-link :to="`/campaign/${campaign.id}`">
-                {{ campaign.name }}
-            </router-link>
+            <CampaignTile :campaign="campaign" />
         </li>
-      </ul>
     </div>
     <div class="create-campaign" @click="showCreateForm = true">
         +
@@ -22,6 +18,7 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
 import { useCampaignStore } from '../stores/campaignStore';  
+import CampaignTile from './CampaignTile.vue';
 
 const campaignStore = useCampaignStore();
 let showCreateForm = ref(false);
@@ -29,12 +26,6 @@ let showCreateForm = ref(false);
 onBeforeMount(() => {
     campaignStore.fetchCampaigns();
 });
-
-function setCreateFormVisibility() {
-    console.log('setCreateFormVisibility');
-    showCreateForm = !showCreateForm;    
-    console.log(showCreateForm);
-}
 </script>
   
 <style scoped>

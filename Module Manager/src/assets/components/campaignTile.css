@@ -1,0 +1,11 @@
+.campaign-tile {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.campaign-tile:hover {
+    background: #f5f5f5;
+}
