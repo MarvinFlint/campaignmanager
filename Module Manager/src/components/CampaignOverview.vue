@@ -1,5 +1,5 @@
 <template>
-    <div v-if="campaignStore.currentCampaign">
+    <div class="campaign-wrapper" v-if="campaignStore.currentCampaign">
         <h1>{{ campaignStore.currentCampaign.name }}</h1>
         <p>{{ campaignStore.currentCampaign.description }}</p>
         <p><strong>Created At:</strong> {{ campaignStore.currentCampaign.created_at }}</p>
