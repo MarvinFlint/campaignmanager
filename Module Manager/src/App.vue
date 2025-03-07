@@ -4,7 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
     <nav class="nav" role="navigation">
-        <RouterLink to="/"><img class="nav-icon" alt="Navigation Home Icon" src="../public/icon.png"></RouterLink>
+        <RouterLink to="/"><img class="nav-icon" alt="Navigation Home Icon" src="/icon.png"></RouterLink>
         <RouterLink to="/overview">Overview</RouterLink>
         <RouterLink to="/campaigns">Campaigns</RouterLink>
     </nav>

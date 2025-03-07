@@ -18,7 +18,7 @@ const pool = new pg.Pool({
 
 app.get('/campaigns', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM campaign');
+        const result = await pool.query('SELECT * FROM campaign ORDER BY created_at ASC');
         res.json(result.rows);
         console.log(result.rows);
     } catch (error) {
