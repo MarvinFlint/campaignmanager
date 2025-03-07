@@ -42,6 +42,17 @@ app.get('/campaigns/:id', async (req, res) => {
     }
 });
 
+app.post('/campaigns', async (req, res) => {
+    const { name, description } = req.body;
+    try {
+        const result = await pool.query('INSERT INTO campaign (name, description) VALUES ($1, $2) RETURNING *', [name, description]);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error creating campaign');
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Module Manager backend listening on port ${port}`)

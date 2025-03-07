@@ -1,0 +1,57 @@
+@import 'variables.scss';
+@import './components/campaignTile.scss';
+@import './components/campaignList.scss';
+
+html{
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand';
+}
+
+body{
+    background-color: var(--white-accent);
+    color: var(--white-accent);
+}
+
+a{
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+nav.nav {
+    width: 100%;
+    font-size: 32px;
+    padding: 5px;
+    display: flex;
+    
+    a:not(:has(.nav-icon)) {
+        position: relative;
+        margin: 0 15px;
+        text-decoration: none;
+        color: var(--secondary);
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 5px;
+            width: 100%;
+            height: 2px; 
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        &:hover::after {
+            transform: scaleX(1);
+        }
+    }
+
+    .nav-icon {
+        width: 40px;
+        height: 40px;
+        color: white;
+        margin-right: 10px;
+    }
+}

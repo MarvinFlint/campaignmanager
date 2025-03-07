@@ -31,6 +31,22 @@ export const useCampaignStore = defineStore('campaign', {
             } catch (error) {
                 console.error('Error fetching campaign:', error);
             }
-        }
+        },
+        async createCampaign(campaign) {
+            try {
+                const response = await fetch('http://localhost:3000/campaigns', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(campaign),
+                });
+                const data = await response.json();
+                console.log('Created campaign:', data);
+                this.campaigns.push(data);
+            } catch (error) {
+                console.error('Error creating campaign:', error);
+            }
+        },
     },
 });

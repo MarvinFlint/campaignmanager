@@ -1,19 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import CampaignView from '@/views/CampaignView.vue'
+import Overview from '../views/Overview.vue'
+import CampaignList from '@/views/CampaignList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView,
+        path: '/',
+        redirect: '/overview',
     },
     {
-      path: '/campaign/:id',
-      name: 'campaign',
-      component: CampaignView
+        path: '/overview',
+        name: 'overview',
+        component: Overview,
+    },
+    {
+        path: '/campaigns',
+        name: 'campaigns',
+        component: CampaignList,
+    },
+    {
+        path: '/campaign/:id',
+        name: 'campaign',
+        component: CampaignView
     }
   ],
 })
