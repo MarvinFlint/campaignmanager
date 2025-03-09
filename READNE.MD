@@ -9,14 +9,16 @@ Create a Postgres DB based on the db.sql in /backend
 In /backend, run
 
 ```
+npm install
 npm run dev
 ```
 
-to start the backend express server. 
+to start the backend express server.
 
 In /Module Manager, run
 
 ```
+npm install
 npm run dev
 ```
 
@@ -24,4 +26,10 @@ to start the vue dev server. Visit the URL in your console to see the frontend.
 
 # TODO
 
-Basically everything. Haven't even decided on the frameworks I will use or what backend.
+Add / Manage Areas, Maps, Characters
+
+An iFrame with TableTopAudio
+
+User Management
+
+Socket.io implementation
