@@ -1,8 +1,6 @@
 <template>
     <div class="campaign-wrapper" v-if="campaignStore.currentCampaign">
         <h1>{{ campaignStore.currentCampaign.name }}</h1>
-
-        <!-- Tabs Navigation -->
         <div class="tabs">
             <div class="tab" v-for="tab in tabs" :key="tab.name"
                 :class="{ active: activeTab === tab.name }"
@@ -10,8 +8,6 @@
                 {{ tab.label }}
         </div>
         </div>
-
-        <!-- Tabs Content -->
         <div class="tab-content">
             <component :is="activeTabComponent" :campaign="campaignStore.currentCampaign"/>
         </div>
@@ -50,7 +46,6 @@ onBeforeMount(() => {
     campaignStore.fetchCampaign(route.params.id);
 });
 
-// Optional: Watch for route changes and refetch data
 watch(() => route.params.id, (newId) => {
     campaignStore.fetchCampaign(newId);
 });

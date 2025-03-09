@@ -1,12 +1,14 @@
-export const areaStore = defineStore('area', {
+import { defineStore } from 'pinia';
+
+export const useAreaStore = defineStore('area', {
     state: () => ({
         areas: [],
         currentArea: null
     }),
     actions: {
-        async fetchAreas() {
+        async fetchAreas(id) {
             try {
-                const response = await fetch('http://localhost:3000/areas');
+                const response = await fetch(`http://localhost:3000/areas/${id}`);
                 console.log('Response status:', response.status);
                 const data = await response.json();
                 console.log('Fetched areas:', data);

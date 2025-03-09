@@ -46,5 +46,23 @@ export const useCampaignStore = defineStore('campaign', {
                 console.error('Error creating campaign:', error);
             }
         },
+        async updateCampaign(campaign) {
+            console.log(campaign);
+            try {
+                const response = await fetch(`http://localhost:3000/campaigns/${campaign.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(campaign),
+                });
+                const data = await response.json();
+                console.log('Updated campaign:', data);
+                const index = this.campaigns.findIndex(c => c.id === campaign.id);
+                this.campaigns[index] = data;
+            } catch (error) {
+                console.error('Error updating campaign:', error);
+            }
+        }
     },
 });

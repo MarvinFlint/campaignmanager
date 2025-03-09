@@ -10,7 +10,8 @@ CREATE TABLE "area" (
   "name" varchar NOT NULL,
   "description" varchar,
   "campaign_id" UUID NOT NULL,
-  "type_id" UUID NOT NULL
+  "type_id" UUID NOT NULL,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE "area_type" (

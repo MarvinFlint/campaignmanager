@@ -1,4 +1,4 @@
-import pool from "../models/db";
+import pool from "../models/db.js";
 
 // Get all areas for a specific campaign
 export const getAreas = async (req, res) => {
@@ -21,5 +21,16 @@ export const getAreaById = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching area');
+    }
+}
+
+export const createArea = async (req, res) => {
+    const { name, description, campaign_id } = req.body;
+    try {
+        const result = await pool.query('INSERT INTO area (name, description, campaign_id) VALUES ($1, $2, $3) RETURNING *', [name, description, campaign_id]);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error creating area');
     }
 }

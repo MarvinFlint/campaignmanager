@@ -1,4 +1,4 @@
-import pool from "../models/db";
+import pool from "../models/db.js";
 
 // Get all maps for a specific area
 export const getMaps = async (req, res) => {
@@ -13,7 +13,7 @@ export const getMaps = async (req, res) => {
 }
 
 // Get the details on a specific map
-export const getMap = async (req, res) => {
+export const getMapById = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query('SELECT * FROM map WHERE id = $1', [id]);

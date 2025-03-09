@@ -41,3 +41,21 @@ export const createCampaign = async (req, res) => {
         res.status(500).send('Error creating campaign');
     }
 };
+
+export const updateCampaign = async (req, res) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    try {
+        const result = await pool.query(
+            'UPDATE campaign SET name = $1, description = $2 WHERE id = $3 RETURNING *',
+            [name, description, id]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Campaign not found" });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating campaign');
+    }
+}
