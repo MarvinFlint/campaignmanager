@@ -1,6 +1,5 @@
 // stores/campaignStore.js
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
 
 export const useCampaignStore = defineStore('campaign', {
     state: () => ({
