@@ -37,7 +37,7 @@ const activeTabComponent = computed(() => {
 });
 
 const tabs = [
-    { name: 'overview', label: 'Overview', component: CampaignDetails },
+    { name: 'details', label: 'Details', component: CampaignDetails },
     { name: 'areas', label: 'Areas', component: CampaignAreas },
     { name: 'characters', label: 'Characters', component: CampaignCharacters }
 ];
