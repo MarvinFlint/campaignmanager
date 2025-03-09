@@ -4,16 +4,16 @@
 
         <!-- Tabs Navigation -->
         <div class="tabs">
-            <button v-for="tab in tabs" :key="tab.name"
+            <div class="tab" v-for="tab in tabs" :key="tab.name"
                 :class="{ active: activeTab === tab.name }"
                 @click="activeTab = tab.name">
                 {{ tab.label }}
-            </button>
+        </div>
         </div>
 
         <!-- Tabs Content -->
         <div class="tab-content">
-            <component :is="activeTabComponent" />
+            <component :is="activeTabComponent" :campaign="campaignStore.currentCampaign"/>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, watch } from 'vue';
+import { onBeforeMount, watch, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCampaignStore } from '../stores/campaignStore';  
 
@@ -34,6 +34,11 @@ import CampaignDetails from './CampaignDetails.vue';
 const campaignStore = useCampaignStore();
 const route = useRoute();
 const activeTab = ref('details');
+
+const activeTabComponent = computed(() => {
+    const tab = tabs.find((tab) => tab.name === activeTab.value);
+    return tab ? tab.component : null;
+});
 
 const tabs = [
     { name: 'overview', label: 'Overview', component: CampaignDetails },
