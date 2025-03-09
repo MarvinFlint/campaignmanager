@@ -1,12 +1,7 @@
 <template>
     <div class="campaign-details-wrapper">
-        <!-- Display Mode -->
         <p v-if="!editDesc">{{ description }}</p>
-        
-        <!-- Edit Mode -->
         <textarea v-else v-model="description"></textarea>
-
-        <!-- Buttons -->
         <button v-if="!editDesc" @click="editDesc = true">Edit</button>
         <button v-else @click="saveDescription">Save</button>
 
