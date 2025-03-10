@@ -2,9 +2,11 @@
     <div class="campaign-details-wrapper">
         <p v-if="!editDesc">{{ description }}</p>
         <textarea v-else v-model="description"></textarea>
-        <button v-if="!editDesc" @click="editDesc = true">Edit</button>
-        <button v-else @click="saveDescription">Save</button>
-
+        <div class="textarea-buttons">
+            <button class="edit-button icon-button" v-if="!editDesc" @click="editDesc = true"><img class="edit-icon button-icon" alt="Edit Icon" src="/edit_icon.png" /></button>
+            <button class="save-button icon-button" v-if="editDesc" @click="saveDescription"><img class="confirm-icon button-icon" alt="Confirm changes" src="/checkmark.svg"></button>
+            <button class="discard-button icon-button" v-if="editDesc" @click="editDesc = false"><img class="discard-icon button-icon" alt="Discard changes" src="/cross.jpg"></button>
+        </div>
         <p>Created at: {{ campaign.created_at }}</p>
     </div>
 </template>

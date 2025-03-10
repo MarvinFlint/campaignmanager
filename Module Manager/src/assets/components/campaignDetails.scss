@@ -1,0 +1,20 @@
+.textarea-buttons{
+    display: flex;
+    margin-top: 10px;
+}
+
+.icon-button{
+    width: 30px;
+    height: 30px;
+    background-color: var(--white-accent);
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px 0 0;
+    .button-icon{
+        width: 20px;
+        height: 20px;
+    }
+}
