@@ -6,7 +6,17 @@ export const useCharacterStore = defineStore("character", {
         currentCharacter: null,
     }),
     actions: {
-        async fetchCharacters(id) {
+        async fetchCharacters() {
+            try {
+                const response = await fetch("http://localhost:3000/characters");
+                const data = await response.json();
+                this.characters = data;
+            }
+            catch (error) {
+                console.error("Error fetching characters:", error);
+            }
+        },
+        async fetchCampaignCharacters(id) {
             try {
                 const response = await fetch(`http://localhost:3000/characters/${id}`);
                 console.log("Response status:", response.status);

@@ -1,7 +1,18 @@
 import pool from "../models/db.js";
 
-// Get all characters for a specific campaign
+// get all characters
 export const getCharacters = async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM character ORDER BY created_at ASC');
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching characters');
+    }
+}
+
+// Get all characters for a specific campaign
+export const getCampaignCharacters = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query('SELECT * FROM character WHERE campaign_id = $1 ORDER BY created_at ASC', [id]);
