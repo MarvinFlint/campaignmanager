@@ -1,0 +1,11 @@
+
+@import './_createItem.scss';
+
+/* Use shared create-item styles for maps */
+.create-map { @extend .create-item; }
+
+.item-list {
+	list-style-type: none;
+	display: flex;
+	flex-wrap: wrap;
+}

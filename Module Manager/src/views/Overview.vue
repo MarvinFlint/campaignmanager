@@ -1,9 +1,10 @@
 <script setup>
-import CampaignList from '@/components/CampaignList.vue';
+
 </script>
 
 <template>
   <main>
-    <CampaignList />
+    <h2>Overview</h2>
+    <p> Nothing here yet - WIP</p>
   </main>
 </template>

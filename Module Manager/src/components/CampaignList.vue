@@ -1,31 +1,33 @@
 <template>
-    <div class="campaign-list-container">
-        <ul class="campaign-list">
+    <div class="campaign-list-container list-container">
+        <ul class="campaign-list item-list" aria-label="Campaigns">
+            <li class="create-campaign">
+                <button
+                    class="create-no-focus"
+                    v-if="!showCreateForm"
+                    @click="showCreateForm = true"
+                    type="button"
+                >
+                    <span>Click to add new campaign</span>
+                    <span>+</span>
+                </button>
+                <div class="create-focus" v-if="showCreateForm">
+                    <div>
+                        <label for="name">Name:</label>
+                        <input id="name" type="text" v-model="newCampaignName" @keyup.enter="handleEnter" />
+                    </div>
+                    <div>
+                        <label for="description">Description:</label>
+                        <input id="description" type="text" v-model="newCampaignDescription" @keyup.enter="handleEnter" />
+                    </div>
+                    <button @click="createCampaign" :disabled="!newCampaignName.trim()">Create</button>
+                </div>
+            </li>
             <li v-for="campaign in campaignStore.campaigns" :key="campaign.id">
                 <CampaignTile :campaign="campaign" />
-            </li>
+            </li>            
         </ul>
-        <div class="create-campaign" @click="showCreateForm = true">
-            +
-        </div>
-    </div>
-
-    <div v-if="showCreateForm" class="create-campaign-wrapper">
-        <div class="create-campaign-form">
-            <div class="close" @click="showCreateForm = false">
-                X
-            </div>
-            <h2>Create Campaign</h2>
-
-            <label for="name">Name:</label>
-            <input type="text" v-model="newCampaignName" @keyup.enter="handleEnter" />
-
-            <label for="description">Description:</label>
-            <input type="text" v-model="newCampaignDescription" @keyup.enter="handleEnter" />
-
-            <button @click="createCampaign" :disabled="!newCampaignName.trim()">Create</button>
-        </div>
-    </div>
+    </div>    
 </template>
   
 <script setup>
@@ -61,7 +63,3 @@ const handleEnter = () => {
     }
 };
 </script>
-  
-<style scoped>
-
-</style>

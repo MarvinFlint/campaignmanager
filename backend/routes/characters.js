@@ -3,10 +3,11 @@ import { getCharacters, getCampaignCharacters, getCharacterById, createCharacter
 
 const router = express.Router(); 
 
-router.get('/', getCharacters);
-router.get('/:id', getCampaignCharacters);
 router.get('/character/:id', getCharacterById);
-router.post('/', createCharacter);
+router.get('/:id', getCampaignCharacters);
 router.post('/copy', copyCharacter);
+router.get('/', getCharacters);
+router.post('/', createCharacter);
+
 
 export default router;

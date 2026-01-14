@@ -25,6 +25,7 @@ export const useCampaignStore = defineStore('campaign', {
                 const response = await fetch(`http://localhost:3000/campaigns/${id}`);
                 const data = await response.json();
                 this.currentCampaign = data;
+                console.log('Fetched campaign:', this.currentCampaign);
             } catch (error) {
                 console.error('Error fetching campaign:', error);
             }

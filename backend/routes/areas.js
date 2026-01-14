@@ -1,10 +1,12 @@
 import express from "express";
-import { getAreas, getAreaById, createArea } from "../controllers/areaController.js";
+import { getAreas, getAreaById, createArea, getAreaTypes } from "../controllers/areaController.js";
 
 const router = express.Router();
 
-router.get("/:id", getAreas);
+
+router.get("/types", getAreaTypes);
 router.get("/area/:id", getAreaById);
+router.get("/:id", getAreas);
 router.post("/", createArea);
 
 export default router;

@@ -1,12 +1,13 @@
 <template>
-    <div class="campaign-wrapper" v-if="campaignStore.currentCampaign">
+    <div class="campaign-wrapper list-wrapper" v-if="campaignStore.currentCampaign">
         <h1>{{ campaignStore.currentCampaign.name }}</h1>
         <div class="tabs">
-            <div class="tab" v-for="tab in tabs" :key="tab.name"
-                :class="{ active: activeTab === tab.name }"
-                @click="activeTab = tab.name">
-                {{ tab.label }}
-        </div>
+        <button class="tab" v-for="tab in tabs" :key="tab.name"
+            :class="{ active: activeTab === tab.name }"
+            @click="activeTab = tab.name"
+            type="button">
+            {{ tab.label }}
+        </button>
         </div>
         <div class="tab-content">
             <component :is="activeTabComponent" :campaign="campaignStore.currentCampaign"/>
@@ -20,7 +21,7 @@
 
 <script setup>
 import { onBeforeMount, watch, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useCampaignStore } from '../stores/campaignStore';  
 
 import CampaignAreas from './CampaignAreas.vue';
@@ -30,6 +31,7 @@ import CampaignDetails from './CampaignDetails.vue';
 const campaignStore = useCampaignStore();
 const route = useRoute();
 const activeTab = ref('details');
+const router = useRouter();
 
 const activeTabComponent = computed(() => {
     const tab = tabs.find((tab) => tab.name === activeTab.value);
@@ -49,4 +51,8 @@ onBeforeMount(() => {
 watch(() => route.params.id, (newId) => {
     campaignStore.fetchCampaign(newId);
 });
+
+const goBack = () => {
+    router.push({ name: 'campaigns' }).catch(() => router.back());
+};
 </script>

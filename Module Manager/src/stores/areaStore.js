@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useAreaStore = defineStore('area', {
     state: () => ({
         areas: [],
+        areaTypes: [],
         currentArea: null
     }),
     actions: {
@@ -21,12 +22,15 @@ export const useAreaStore = defineStore('area', {
         },
         async fetchArea(id) {
             try {
-                const response = await fetch(`http://localhost:3000/areas/${id}`);
+                const response = await fetch(`http://localhost:3000/areas/area/${id}`);
                 const data = await response.json();
                 this.currentArea = data;
             } catch (error) {
                 console.error('Error fetching area:', error);
             }
+        },
+        setCurrentArea(area) {
+            this.currentArea = area;
         },
         async createArea(area) {
             console.log(area);
@@ -45,5 +49,15 @@ export const useAreaStore = defineStore('area', {
                 console.error('Error creating area:', error);
             }
         },
-    },
+        async fetchAreaTypes() {
+            try {
+                const response = await fetch('http://localhost:3000/areas/types');
+                const data = await response.json();
+                this.areaTypes = data;
+                console.log('Fetched area types:', data);
+            } catch (error) {
+                console.error('Error fetching area types:', error);
+            }
+        }
+    }
 });

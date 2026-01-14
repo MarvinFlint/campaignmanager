@@ -3,6 +3,11 @@
 @import './components/campaignList.scss';
 @import './components/campaignOverview.scss';
 @import './components/campaignDetails.scss';
+@import './components/characterList.scss';
+@import './components/characterDetails.scss';
+@import './components/maps.scss';
+@import './components/mapList.scss';
+@import './components/vtt.scss';
 
 html{
     margin: 0;
@@ -11,8 +16,35 @@ html{
 }
 
 body{
-    background-color: var(--white-accent);
+    background-color: var(--bg);
     color: var(--white-accent);
+}
+
+/* Global accessible focus styles */
+:root{
+    --focus-ring-color: rgba(102,163,255,0.95);
+    --focus-ring-offset: 3px;
+}
+
+/* Use a JS-controlled class to only show focus styles when user is keyboard-navigating */
+.user-is-tabbing {
+    :where(:focus-visible) {
+        outline: none;
+    }
+
+    *:where(:focus-visible), *:where(:focus):not(:where(:focus-visible)) {
+        box-shadow: 0 0 0 var(--focus-ring-offset) var(--focus-ring-color) inset, 0 0 0 calc(var(--focus-ring-offset) + 3px) var(--focus-ring-color);
+        border-radius: 4px;
+    }
+
+    /* Make focus rings slightly larger on interactive controls */
+    button:where(:focus-visible), a:where(:focus-visible), input:where(:focus-visible), select:where(:focus-visible), textarea:where(:focus-visible) {
+        box-shadow: 0 0 0 3px rgba(102,163,255,0.9);
+    }
+}
+
+.main{
+    color: var(--secondary);
 }
 
 a{
@@ -56,4 +88,42 @@ nav.nav {
         color: white;
         margin-right: 10px;
     }
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+.create-button{
+    position: absolute;
+    bottom: 0;
+    right: 50px;
+    margin: 10px;
+    padding: 10px;
+    background-color: var(--secondary);
+    color: var(--white-accent);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    font-size: 32px;
+}
+
+.create-button:hover{
+    background-color: var(--white-accent);
+    color: var(--secondary);
+    box-shadow: 0 0 10px var(--secondary);
+}
+
+.back-tab{
+    background: none;
+    border: none;
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: 2rem;
 }

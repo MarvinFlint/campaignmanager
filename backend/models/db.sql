@@ -26,6 +26,7 @@ CREATE TABLE "map" (
   "notes" varchar,
   "image" BYTEA,
   "size_grid" integer,
+  "vtt_state" jsonb,
   "created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -49,13 +50,16 @@ CREATE TABLE "character" (
   "campaign_id" UUID NOT NULL,
   "first_name" varchar NOT NULL,
   "last_name" varchar,
+  "token_image" BYTEA,
+  "art_image" BYTEA,
   "race_id" UUID NOT NULL,
   "alignment_id" UUID NOT NULL,
   "hit_points_total" integer,
   "hit_points_current" integer,
   "hit_points_temporary" integer,
   "armor_class" integer,
-  "isNPC" boolean
+  "isNPC" boolean,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE "race" (
@@ -114,15 +118,49 @@ CREATE TABLE "character_spell" (
 
 CREATE TABLE "spell" (
   "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "name" varchar,
-  "school_id" UUID NOT NULL,
-  "level" integer,
-  "description" varchar
+  "name" varchar NOT NULL,
+  "school_id" UUID,
+  "sphere_id" UUID,
+  "casting_time" INTEGER,
+  "range" varchar,
+  "area_of_effect" text,
+  "saving_throw" text,
+  "reversible" boolean DEFAULT false,
+  "is_priest_spell" boolean DEFAULT false,
+  "is_arcane_spell" boolean DEFAULT false,
+  "description" text
 );
 
 CREATE TABLE "school" (
   "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" varchar
+);
+
+CREATE TABLE "sphere" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "name" varchar NOT NULL
+);
+
+CREATE TABLE "component_type" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "code" varchar NOT NULL UNIQUE,   
+  "name" varchar NOT NULL           
+);
+
+CREATE TABLE "spell_component" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "spell_id" UUID NOT NULL,
+  "component_type_id" UUID NOT NULL,
+  "material_detail" text,
+  UNIQUE ("spell_id","component_type_id")
+);
+
+CREATE TABLE "spell_class_level" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "spell_id" UUID NOT NULL,
+  "class_id" UUID NOT NULL,
+  "level" integer NOT NULL,
+  UNIQUE ("spell_id","class_id")
 );
 
 CREATE TABLE "item" (
@@ -164,8 +202,12 @@ ALTER TABLE "saving_throw" ADD FOREIGN KEY ("character_id") REFERENCES "characte
 ALTER TABLE "character_spell" ADD FOREIGN KEY ("character_id") REFERENCES "character" ("id") ON DELETE CASCADE;
 ALTER TABLE "character_spell" ADD FOREIGN KEY ("spell_id") REFERENCES "spell" ("id") ON DELETE CASCADE;
 ALTER TABLE "spell" ADD FOREIGN KEY ("school_id") REFERENCES "school" ("id") ON DELETE CASCADE;
+ALTER TABLE "spell" ADD FOREIGN KEY ("sphere_id") REFERENCES "sphere" ("id") ON DELETE CASCADE;
+ALTER TABLE "spell" ADD CONSTRAINT spell_school_or_sphere_chk CHECK (school_id IS NOT NULL OR sphere_id IS NOT NULL);
+ALTER TABLE "spell_component" ADD FOREIGN KEY ("spell_id") REFERENCES "spell" ("id") ON DELETE CASCADE;
+ALTER TABLE "spell_component" ADD FOREIGN KEY ("component_type_id") REFERENCES "component_type" ("id") ON DELETE CASCADE;
+ALTER TABLE "spell_class_level" ADD FOREIGN KEY ("spell_id") REFERENCES "spell" ("id") ON DELETE CASCADE;
+ALTER TABLE "spell_class_level" ADD FOREIGN KEY ("class_id") REFERENCES "class" ("id") ON DELETE CASCADE;
 ALTER TABLE "item" ADD FOREIGN KEY ("character_inventory_id") REFERENCES "character_inventory" ("id") ON DELETE CASCADE;
 ALTER TABLE "item_property" ADD FOREIGN KEY ("item_id") REFERENCES "item" ("id") ON DELETE CASCADE;
 ALTER TABLE "character_inventory" ADD FOREIGN KEY ("character_id") REFERENCES "character" ("id") ON DELETE CASCADE;
-
-

@@ -4,6 +4,7 @@ import campaignRoutes from './routes/campaigns.js';
 import characterRoutes from './routes/characters.js';
 import mapRoutes from './routes/maps.js';
 import areaRoutes from './routes/areas.js';
+import lookupRoutes from './routes/lookups.js';
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,7 @@ app.use('/campaigns', campaignRoutes);
 app.use('/characters', characterRoutes);
 app.use('/maps', mapRoutes);
 app.use('/areas', areaRoutes);
+app.use('/lookups', lookupRoutes);
 
 
 app.listen(port, () => {

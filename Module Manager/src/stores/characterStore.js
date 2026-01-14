@@ -30,9 +30,16 @@ export const useCharacterStore = defineStore("character", {
         },
         async fetchCharacter(id) {
             try {
-                const response = await fetch(`http://localhost:3000/characters/${id}`);
+                if (!id) return;
+                const response = await fetch(`http://localhost:3000/characters/character/${id}`);
+                if (!response.ok) {
+                    console.error('Failed to fetch character, status:', response.status);
+                    this.currentCharacter = null;
+                    return null;
+                }
                 const data = await response.json();
                 this.currentCharacter = data;
+                console.log("Fetched character:", this.currentCharacter);
             } catch (error) {
                 console.error("Error fetching character:", error);
             }
@@ -54,5 +61,29 @@ export const useCharacterStore = defineStore("character", {
                 console.error("Error creating character:", error);
             }
         },
+        async updateCharacter(payload) {
+            try {
+                const response = await fetch(`http://localhost:3000/characters/${payload.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    console.error('Failed to update character, status:', response.status);
+                    return null;
+                }
+                const updated = await response.json();
+                // If currently viewing this character, update local state
+                if (this.currentCharacter && this.currentCharacter.id === updated.id) {
+                    this.currentCharacter = updated;
+                }
+                // Also update the list cache if present
+                const idx = this.characters.findIndex(c => c.id === updated.id);
+                if (idx !== -1) this.characters.splice(idx, 1, updated);
+                return updated;
+            } catch (error) {
+                console.error('Error updating character:', error);
+            }
+        }
     },
 });

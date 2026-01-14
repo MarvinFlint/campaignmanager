@@ -1,7 +1,13 @@
 <template>
     <div class="campaign-details-wrapper">
         <p v-if="!editDesc">{{ description }}</p>
-        <textarea v-else v-model="description"></textarea>
+        <div v-else>
+            <label for="desc-textarea">Description</label>
+            <textarea 
+                id="desc-textarea" 
+                v-model="description"
+            ></textarea>
+        </div>
         <div class="textarea-buttons">
             <button class="edit-button icon-button" v-if="!editDesc" @click="editDesc = true"><img class="edit-icon button-icon" alt="Edit Icon" src="/edit_icon.png" /></button>
             <button class="save-button icon-button" v-if="editDesc" @click="saveDescription"><img class="confirm-icon button-icon" alt="Confirm changes" src="/checkmark.svg"></button>

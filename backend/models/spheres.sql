@@ -1,0 +1,31 @@
+INSERT INTO sphere (id, name) VALUES
+  -- Core spheres (Player’s Handbook)
+  (gen_random_uuid(), 'All'),
+  (gen_random_uuid(), 'Animal'),
+  (gen_random_uuid(), 'Astral'),
+  (gen_random_uuid(), 'Charm'),
+  (gen_random_uuid(), 'Combat'),
+  (gen_random_uuid(), 'Creation'),
+  (gen_random_uuid(), 'Divination'),
+  (gen_random_uuid(), 'Elemental (Air)'),
+  (gen_random_uuid(), 'Elemental (Earth)'),
+  (gen_random_uuid(), 'Elemental (Fire)'),
+  (gen_random_uuid(), 'Elemental (Water)'),
+  (gen_random_uuid(), 'Guardian'),
+  (gen_random_uuid(), 'Healing'),
+  (gen_random_uuid(), 'Necromantic'),
+  (gen_random_uuid(), 'Plant'),
+  (gen_random_uuid(), 'Protection'),
+  (gen_random_uuid(), 'Summoning'),
+  (gen_random_uuid(), 'Sun'),
+  (gen_random_uuid(), 'Weather'),
+
+  -- Tome of Magic spheres
+  (gen_random_uuid(), 'Chaos'),
+  (gen_random_uuid(), 'Law'),
+  (gen_random_uuid(), 'Numbers'),
+  (gen_random_uuid(), 'Thought'),
+  (gen_random_uuid(), 'Time'),
+  (gen_random_uuid(), 'Travelers'),
+  (gen_random_uuid(), 'War'),
+  (gen_random_uuid(), 'Wards');

@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "eslint-plugin-vuejs-accessibility": "^2.4.1"
+  }
+}
