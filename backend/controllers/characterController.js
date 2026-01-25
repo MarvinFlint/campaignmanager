@@ -98,6 +98,24 @@ export const getCharacterById = async (req, res) => {
     }
 }
 
+// Get class names and levels for a character
+export const getCharacterClasses = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT cc.class_id AS id, cl.name, cc.level
+            FROM character_class cc
+            LEFT JOIN class cl ON cc.class_id = cl.id
+            WHERE cc.character_id = $1
+            ORDER BY cc.level ASC
+        `, [id]);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching character classes:', error);
+        res.status(500).send('Error fetching character classes');
+    }
+}
+
 // Create a character in a given campaign
 export const createCharacter = async (req, res) => {
     const {
@@ -161,6 +179,8 @@ export const createCharacter = async (req, res) => {
         res.status(500).send('Error creating character');
     }
 }
+
+
 
 // Update character core fields and classes
 export const updateCharacter = async (req, res) => {

@@ -38,7 +38,7 @@
                             <label for="map-image">Image:</label>
                             <input id="map-image" name="map-image" type="file" accept="image/*" @change="onFileChange" />
                         </div>
-                        <button @click="createMap" :disabled="!newMapName.trim()">Create</button>
+                        <button  class="default-button" aria-label="Create map" @click="createMap" :disabled="!newMapName.trim()">Create</button>
                     </div>
                 </li>
                 <li v-for="map in mapStore.maps" :key="map.id">

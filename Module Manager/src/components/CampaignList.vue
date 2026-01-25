@@ -3,7 +3,7 @@
         <ul class="campaign-list item-list" aria-label="Campaigns">
             <li class="create-campaign">
                 <button
-                    class="create-no-focus"
+                    class="create-no-focus create-button"
                     v-if="!showCreateForm"
                     @click="showCreateForm = true"
                     type="button"
@@ -20,7 +20,7 @@
                         <label for="description">Description:</label>
                         <input id="description" type="text" v-model="newCampaignDescription" @keyup.enter="handleEnter" />
                     </div>
-                    <button @click="createCampaign" :disabled="!newCampaignName.trim()">Create</button>
+                    <button class="default-button" aria-label="Create campaign" @click="createCampaign" :disabled="!newCampaignName.trim()">Create</button>
                 </div>
             </li>
             <li v-for="campaign in campaignStore.campaigns" :key="campaign.id">

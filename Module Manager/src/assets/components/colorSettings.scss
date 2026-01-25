@@ -1,0 +1,49 @@
+.theme-settings {
+    position: relative;
+}
+.cog {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.cog img {
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+.cog {
+    line-height: 0;
+}
+.panel {
+    position: absolute;
+    right: 0;
+    top: 36px;
+    background: var(--white-accent);
+    color: #111;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 50;
+}
+.panel label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.panel input[type="color"] {
+    width: 48px;
+    height: 32px;
+    border: none;
+    padding: 0;
+    background: transparent;
+}
+.panel .actions {
+    text-align: right;
+}
+button {
+    cursor: pointer;
+}

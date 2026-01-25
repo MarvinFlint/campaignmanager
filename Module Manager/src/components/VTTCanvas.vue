@@ -10,6 +10,7 @@
                         :class="{ active: vtt.ui.activeTokenId === token.id }"
                         :style="tokenStyle(token)"
                         :aria-label="`Token ${token.name || token.id}`"
+                        aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight W A S D"
                         :data-token-id="token.id"
                         @click.stop="onTokenClick(token, $event)"
                         @mousedown.prevent.stop="startDrag(token, $event)"
@@ -27,38 +28,33 @@
                     </button>
                 </template>
 
-                 <!-- preview token while placing -->
-                                            <div v-if="placingCharacter && previewPos"
-                                                        class="vtt-token preview"
-                                                        :style="(() => {
-                                                                const cols = vtt.vtt.grid.cols;
-                                                                const rows = vtt.vtt.grid.rows;
-                                                                const baseCellW = imageW.value / cols;
-                                                                const baseCellH = imageH.value / rows;
-                                                                const baseCell = Math.max(baseCellW, baseCellH);
-                                                                const cellWidth = baseCell * zoom.value;
-                                                                const cellHeight = cellWidth;
-                                                                const gridWidth = baseCell * cols * zoom.value;
-                                                                const gridHeight = baseCell * rows * zoom.value;
-                                                                const offsetX = pan.x + ((imageW.value * zoom.value) - gridWidth) / 2;
-                                                                const offsetY = pan.y + ((imageH.value * zoom.value) - gridHeight) / 2;
-                                                                return {
-                                                                    left: previewPos.pixelLeft + 'px',
-                                                                    top: previewPos.pixelTop + 'px',
-                                                                    width: cellWidth + 'px',
-                                                                    height: cellHeight + 'px'
-                                                                };
-                                                        })()"
-                                                        aria-hidden="true"></div>
-                <!-- placement toast inside container -->
-                <div v-if="placingToast" class="vtt-placement-toast" role="status" aria-live="assertive" aria-atomic="true">{{ placingToast }}</div>
+                <div v-if="placingCharacter && previewPos"
+                            class="vtt-token preview"
+                            :style="(() => {
+                                    const cols = vtt.vtt.grid.cols;
+                                    const rows = vtt.vtt.grid.rows;
+                                    const baseCellW = imageW.value / cols;
+                                    const baseCellH = imageH.value / rows;
+                                    const baseCell = Math.max(baseCellW, baseCellH);
+                                    const cellWidth = baseCell * zoom.value;
+                                    const cellHeight = cellWidth;
+                                    const gridWidth = baseCell * cols * zoom.value;
+                                    const gridHeight = baseCell * rows * zoom.value;
+                                    const offsetX = pan.x + ((imageW.value * zoom.value) - gridWidth) / 2;
+                                    const offsetY = pan.y + ((imageH.value * zoom.value) - gridHeight) / 2;
+                                    return {
+                                        left: previewPos.pixelLeft + 'px',
+                                        top: previewPos.pixelTop + 'px',
+                                        width: cellWidth + 'px',
+                                        height: cellHeight + 'px'
+                                    };
+                            })()"
+                            aria-hidden="true"></div>
             </div>
         </div>
 
-        <!-- Screen-reader live region for move announcements -->
         <div ref="srLive" class="sr-only" role="status" aria-live="polite" aria-atomic="true">{{ liveMessage }}</div>
 
-        <!-- Placement toast: visible and announced for screen readers -->
         <div v-if="placingToast" class="vtt-placement-toast" role="status" aria-live="assertive" aria-atomic="true">{{ placingToast }}</div>
 
         <aside class="vtt-characters" aria-label="Characters in campaign">
@@ -86,7 +82,7 @@
 
 <script setup>
 
-import { onMounted, ref, watch, nextTick, reactive } from 'vue';
+import { onMounted, onUnmounted, ref, watch, nextTick, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVttStore } from '@/stores/vttStore';
 import { useMapStore } from '@/stores/mapStore';
@@ -116,21 +112,20 @@ const previewPos = ref(null);
 const placingToast = ref('');
 let dragging = null;
 const liveMessage = ref('');
-const _imgCache = new Map(); // character_id -> Image or null
+const _imgCache = new Map();
 
 function getTokenImageForCharacter(charId){
     if (!charId) return null;
     const cached = _imgCache.get(charId);
     if (cached !== undefined) return cached;
-    // attempt to construct a URL where server would serve character token images
     const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
-    const url = `${apiBase.replace(/\/$/, '')}/characters/${charId}/token`; // endpoint convention
+    const url = `${apiBase.replace(/\/$/, '')}/characters/${charId}/token`;
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => { _imgCache.set(charId, img); draw(); };
     img.onerror = () => { _imgCache.set(charId, null); };
     img.src = url;
-    _imgCache.set(charId, undefined); // mark as loading
+    _imgCache.set(charId, undefined);
     return undefined;
 }
 
@@ -194,7 +189,6 @@ function findFirstEmptyCell(){
             if (!occupied.has(`${x},${y}`)) return { x, y };
         }
     }
-    // fallback to center
     return { x: Math.floor(cols/2), y: Math.floor(rows/2) };
 }
 
@@ -246,9 +240,6 @@ function endBgPan(){
 
 function onWheel(ev){
     ev.preventDefault();
-    const rect = canvasRef.value.getBoundingClientRect();
-    const mx = ev.clientX - rect.left;
-    const my = ev.clientY - rect.top;
     const delta = -ev.deltaY;
     const factor = delta > 0 ? 1.1 : 0.9;
     zoomAtPoint(ev.clientX, ev.clientY, factor);
@@ -291,8 +282,6 @@ function endDrag(){
 function draw(){
     if (!image || !ctx || !canvasRef.value) return;
     const canvas = canvasRef.value;
-    const displayW = canvas.clientWidth;
-    const displayH = canvas.clientHeight;
     
     ctx.setTransform(1,0,0,1,0,0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -354,11 +343,9 @@ function drawTokens(){
         const charId = token.character_id;
         const cached = _imgCache.get(charId);
         if (cached instanceof Image && cached.complete) {
-            // draw image centered in cell and cover whole cell
             try {
                 ctx.drawImage(cached, x, y, cellWidth, cellHeight);
             } catch (e) {
-                // fallback to placeholder
                 ctx.fillStyle = token.color || '#888';
                 ctx.beginPath();
                 ctx.arc(x + cellWidth/2, y + cellHeight/2, Math.min(cellWidth, cellHeight)/2 - 2, 0, Math.PI*2);
@@ -370,7 +357,6 @@ function drawTokens(){
                 ctx.fillText(ch.toUpperCase(), x + cellWidth/2, y + cellHeight/2);
             }
         } else if (cached === null) {
-            // explicit no-image -> draw placeholder circle with initial
             ctx.fillStyle = '#777';
             ctx.beginPath();
             ctx.arc(x + cellWidth/2, y + cellHeight/2, Math.min(cellWidth, cellHeight)/2 - 2, 0, Math.PI*2);
@@ -381,7 +367,6 @@ function drawTokens(){
             const ch = (token.name && token.name[0]) || '?';
             ctx.fillText(ch.toUpperCase(), x + cellWidth/2, y + cellHeight/2);
         } else {
-            // not loaded yet -> kick off load and draw simple rect as placeholder
             if (charId && !_imgCache.has(charId)) getTokenImageForCharacter(charId);
             ctx.fillStyle = token.color || '#d33';
             ctx.fillRect(x, y, cellWidth, cellHeight);
@@ -436,16 +421,36 @@ function onTokenKeydown(token, ev){
     else if (key === 'ArrowDown') dy = step;
     else if (key === 'ArrowLeft') dx = -step;
     else if (key === 'ArrowRight') dx = step;
-    else return; 
+    /* Fallback keys for screen readers */
+    else if (key === 'w' || key === 'W') dy = -step;
+    else if (key === 's' || key === 'S') dy = step;
+    else if (key === 'a' || key === 'A') dx = -step;
+    else if (key === 'd' || key === 'D') dx = step;
+    else return;
 
     ev.preventDefault();
     ev.stopPropagation();
 
-    vtt.moveToken(token.id, dx, dy);
+    const cols = vtt.vtt.grid.cols || 1;
+    const rows = vtt.vtt.grid.rows || 1;
+    const startX = token.x;
+    const startY = token.y;
+    let newX = startX + dx;
+    let newY = startY + dy;
+    newX = Math.max(0, Math.min(cols - 1, newX));
+    newY = Math.max(0, Math.min(rows - 1, newY));
+
+    if (newX === startX && newY === startY){
+        liveMessage.value = `${token.name || ('Token ' + token.id)} is at the edge of the grid.`;
+        return;
+    }
+
+    vtt.setTokenPosition(token.id, newX, newY);
     draw();
-    // announce for screen readers
-    const dir = dx < 0 ? 'left' : dx > 0 ? 'right' : dy < 0 ? 'up' : 'down';
-    const steps = Math.abs(dx || dy);
+    const ddx = newX - startX;
+    const ddy = newY - startY;
+    const dir = ddx < 0 ? 'left' : ddx > 0 ? 'right' : ddy < 0 ? 'up' : 'down';
+    const steps = Math.abs(ddx || ddy);
     const label = token.name || ('Token ' + token.id);
     liveMessage.value = `Moved ${label} ${steps > 1 ? steps + ' fields ' : 'one field '} ${dir}.`;
 }
@@ -493,11 +498,18 @@ onMounted(async () => {
 
     // global handlers: clicking outside tokens deselects; Esc clears selection
     function onDocumentClick(ev){
-        // if click happened inside overlay tokens, ignore
+        // Ignore clicks inside the VTT overlay
         const overlay = canvas.parentElement && canvas.parentElement.querySelector('.vtt-overlay');
         if (overlay && overlay.contains(ev.target)) return;
+
+        // Ignore clicks on interactive form controls elsewhere in the app
+        const tgt = ev.target;
+        const tag = tgt && tgt.tagName;
+        const isControl = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' || (tgt && tgt.isContentEditable);
+        if (isControl) return;
+
+        // Deselect any active token; do not forcibly blur global active element
         vtt.setActiveToken(null);
-        try { if (document && document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur(); } catch(e) {}
     }
 
     function onDocumentKeydown(ev){
@@ -524,8 +536,11 @@ onMounted(async () => {
             return;
         }
 
-        // pan with Ctrl/Meta + Arrow keys
-        if ((ev.ctrlKey || ev.metaKey) && (ev.key === 'ArrowUp' || ev.key === 'ArrowDown' || ev.key === 'ArrowLeft' || ev.key === 'ArrowRight')){
+        // pan with Ctrl/Meta + Arrow keys (and provide Ctrl + WASD fallback)
+        const isCtrlLike = (ev.ctrlKey || ev.metaKey);
+        const isArrow = (ev.key === 'ArrowUp' || ev.key === 'ArrowDown' || ev.key === 'ArrowLeft' || ev.key === 'ArrowRight');
+        const isWASD = (ev.key === 'w' || ev.key === 'W' || ev.key === 'a' || ev.key === 'A' || ev.key === 's' || ev.key === 'S' || ev.key === 'd' || ev.key === 'D');
+        if (isCtrlLike && (isArrow || isWASD)){
             // compute step: try to use one grid cell (scaled by zoom) or fallback to 20px
             let step = 20;
             try {
@@ -537,10 +552,11 @@ onMounted(async () => {
                 step = Math.max(10, Math.round(baseCell * zoom.value));
             } catch (e) {}
 
-            if (ev.key === 'ArrowLeft') pan.x -= step;
-            else if (ev.key === 'ArrowRight') pan.x += step;
-            else if (ev.key === 'ArrowUp') pan.y -= step;
-            else if (ev.key === 'ArrowDown') pan.y += step;
+            const k = ev.key;
+            if (k === 'ArrowLeft' || k === 'a' || k === 'A') pan.x -= step;
+            else if (k === 'ArrowRight' || k === 'd' || k === 'D') pan.x += step;
+            else if (k === 'ArrowUp' || k === 'w' || k === 'W') pan.y -= step;
+            else if (k === 'ArrowDown' || k === 's' || k === 'S') pan.y += step;
 
             draw();
             ev.preventDefault();
@@ -592,16 +608,14 @@ onMounted(async () => {
         resizeCanvas();
     });
 
-    import('vue').then(({ onUnmounted }) => {
-        onUnmounted(() => {
-            canvas.removeEventListener('click', onCanvasClick);
-            canvas.removeEventListener('mousemove', onCanvasMouseMove);
-            window.removeEventListener('resize', resizeCanvas);
-                canvas.removeEventListener('mousedown', startBgPan);
-                canvas.removeEventListener('wheel', onWheel);
-                document.removeEventListener('click', onDocumentClick);
-                document.removeEventListener('keydown', onDocumentKeydown);
-        });
+    onUnmounted(() => {
+        canvas.removeEventListener('click', onCanvasClick);
+        canvas.removeEventListener('mousemove', onCanvasMouseMove);
+        window.removeEventListener('resize', resizeCanvas);
+        canvas.removeEventListener('mousedown', startBgPan);
+        canvas.removeEventListener('wheel', onWheel);
+        document.removeEventListener('click', onDocumentClick);
+        document.removeEventListener('keydown', onDocumentKeydown);
     });
 });
 
@@ -661,6 +675,8 @@ function selectCharacter(c){
 watch(() => placingCharacter.value, (nv) => {
     if (nv) {
         placingToast.value = `Placing ${nv.first_name || nv.name || 'character'}. Click on the map or press Enter to place. Press Escape to cancel.`;
+        // Also announce via persistent live region for reliable SR output
+        liveMessage.value = placingToast.value;
     } else {
         placingToast.value = '';
     }

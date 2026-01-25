@@ -4,8 +4,27 @@ export const useCharacterStore = defineStore("character", {
     state: () => ({
         characters: [],
         currentCharacter: null,
+        classesByCharacter: {},
     }),
     actions: {
+        async fetchCharacterClasses(id) {
+            try {
+                if (!id) return null;
+                if (this.classesByCharacter && this.classesByCharacter[id]) {
+                    return this.classesByCharacter[id];
+                }
+                const response = await fetch(`http://localhost:3000/characters/character/${id}/classes`);
+                if (!response.ok) {
+                    console.error('Failed to fetch character classes, status:', response.status);
+                    return null;
+                }
+                const data = await response.json();
+                this.classesByCharacter = { ...this.classesByCharacter, [id]: data };
+                return data;
+            } catch (error) {
+                console.error('Error fetching character classes:', error);
+            }
+        },
         async fetchCharacters() {
             try {
                 const response = await fetch("http://localhost:3000/characters");

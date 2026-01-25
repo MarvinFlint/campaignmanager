@@ -23,11 +23,11 @@
                         </div>
                         <div>
                             <label for="area-type">Type:</label>
-                            <select id="area-type" name="area-type" v-model="newAreaType">
+                            <select class="default-select" id="area-type" name="area-type" v-model="newAreaType">
                                 <option v-for="type in areaStore.areaTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                             </select>
                         </div>
-                        <button @click="createArea" :disabled="!newAreaName.trim()">Create</button>
+                        <button  class="default-button" aria-label="Create area" @click="createArea" :disabled="!newAreaName.trim()">Create</button>
                     </div>
                 </li>
                 <li v-for="area in areaStore.areas" :key="area.id">

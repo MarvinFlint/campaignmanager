@@ -15,9 +15,9 @@
                     <textarea id="notes-textarea" v-model="notes"></textarea>
                 </div>
                 <div class="textarea-buttons">
-                    <button class="edit-button icon-button" v-if="!editingNotes" @click="startEdit"><img class="edit-icon button-icon" alt="Edit Icon" src="/edit_icon.png" /></button>
-                    <button class="save-button icon-button" v-if="editingNotes" @click="saveNotes"><img class="confirm-icon button-icon" alt="Confirm changes" src="/checkmark.svg"></button>
-                    <button class="discard-button icon-button" v-if="editingNotes" @click="cancelEdit"><img class="discard-icon button-icon" alt="Discard changes" src="/cross.jpg"></button>
+                    <button aria-label="Edit notes" class="edit-button icon-button" v-if="!editingNotes" @click="startEdit"><img class="edit-icon button-icon" alt="Edit Icon" src="/edit_icon.png" /></button>
+                    <button aria-label="Save notes" class="save-button icon-button" v-if="editingNotes" @click="saveNotes"><img class="confirm-icon button-icon" alt="Confirm changes" src="/checkmark.svg"></button>
+                    <button aria-label="Discard changes" class="discard-button icon-button" v-if="editingNotes" @click="cancelEdit"><img class="discard-icon button-icon" alt="Discard changes" src="/cross.jpg"></button>
                 </div>
             </div>
                 <router-link v-if="mapStore.currentMap && mapStore.currentMap.id" :to="{ name: 'tabletop', params: { mapId: mapStore.currentMap.id } }">
